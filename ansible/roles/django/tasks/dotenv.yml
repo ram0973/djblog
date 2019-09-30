@@ -1,0 +1,31 @@
+---
+- name: Get dotenv file status
+  stat: path={{ dotenv_file }}
+  register: dotenv_file_status
+  tags: env_file
+
+- name: Backup dotenv file
+  copy: remote_src=True src={{ dotenv_file }} dest={{ dotenv_file }}.old
+  when: dotenv_file_status.stat.exists
+  tags: env_file
+
+- name: Generate django SECRET_KEY
+  command: "{{ venv_python }} {{ app_dir }}/ansible/roles/django/files/get_django_secret_key.py"
+  register: command_output
+  tags: dotenv
+
+- set_fact:
+    django_secret_key: "{{ command_output.stdout }}"
+  tags: dotenv
+
+- name: Write dotenv file
+  template: src=env.j2 dest={{ dotenv_file }}
+  become: yes
+  tags: dotenv
+
+- name: Export .env file
+  shell: source {{ dotenv_file }}
+  args:
+    executable: /bin/bash
+  become: no
+  tags: dotenv

@@ -1,0 +1,29 @@
+---
+# Install project requirements
+
+- name: Make venv
+  shell: "{{ ansible_python_interpreter }} -m venv {{ app_dir }}/venv"
+  tags: requirements
+
+- name: Update pip
+  pip:
+    name: pip
+    state: latest
+    virtualenv: "{{ venv_dir }}"
+    virtualenv_python: "{{ venv_python }}"
+  tags: requirements
+
+- name: Install wheel
+  pip:
+    name: wheel
+    state: latest
+    virtualenv: "{{ venv_dir }}"
+    virtualenv_python: "{{ venv_python }}"
+  tags: requirements
+
+- name: Install requirements
+  pip:
+    virtualenv: "{{ venv_dir }}"
+    virtualenv_python: "{{ venv_python }}"
+    requirements: "{{ app_dir }}/requirements/{{ env }}.txt"
+  tags: requirements

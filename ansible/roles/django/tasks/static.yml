@@ -1,0 +1,8 @@
+---
+# Collect static files
+
+- name: Collect static files
+  django_manage: app_path={{ app_dir }} command=collectstatic virtualenv={{ venv_dir }}
+    settings={{ django_settings_module }} python_path={{ venv_python }}
+  become: no
+  tags: static

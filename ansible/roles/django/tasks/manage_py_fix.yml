@@ -1,0 +1,6 @@
+---
+- name: Make manage.py executable
+  file:
+    path: "{{ app_dir }}/manage.py"
+    mode: 0755
+  tags: manage

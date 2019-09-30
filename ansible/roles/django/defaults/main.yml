@@ -1,0 +1,7 @@
+django_settings_module: core.settings
+django_su_email: admin@{{ app_domain }}
+django_su_password: pass
+dotenv_file: '{{ app_dir }}/core/.env'
+sentry_dsn:
+venv_dir: '/webapps/{{ app_name }}/venv'
+venv_python: '{{ venv_dir }}/bin/python3'

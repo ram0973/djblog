@@ -1,0 +1,29 @@
+---
+- name: This Ansible Playbook deploys app to production servers
+  hosts: prod_servers
+  vars_files:
+  - group_vars/all.yml
+  #- group_vars/secrets.yml
+  vars_prompt:
+  - name: app_domain
+    prompt: "Enter domain:"
+  - name: db_name
+    prompt: "Enter db name:"
+  - name: db_user
+    prompt: "Enter db user:"
+  - name: db_password
+    prompt: "Enter db password:"
+  - name: sentry_dsn
+    prompt: "Enter Sentry DSN:"
+  - name: django_su_email
+    prompt: "Enter site admin email:"
+  - name: django_su_password
+    prompt: "Enter site admin password:"
+  roles:
+    - prepare_server
+    - git
+    - postgresql
+    - django
+    - gunicorn
+    - nginx
+    - cerbot

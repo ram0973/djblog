@@ -1,0 +1,45 @@
+# Install Docker & Docker Compose
+
+- name: Set Docker-Compose Version
+  set_fact:
+    docker_compose_version: "1.24.1"
+  tags: docker
+
+- name: Add Docker official key
+  apt_key: url=https://download.docker.com/linux/ubuntu/gpg
+  become: yes
+  tags: docker
+
+- name: Add Docker official repository
+  apt_repository: repo="deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable"
+  become: yes
+  tags: docker
+  
+- name: Install required packages for docker
+  apt:
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+    state: latest
+    cache_valid_time: 3600
+  become: yes     
+  tags: docker
+  
+- name: Uninstall docker-compose if exists
+  apt:
+    name: docker-compose
+    state: absent
+  become: yes     
+  tags: docker
+
+- name: Download docker-compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_architecture}}
+    dest: /usr/local/bin/docker-compose
+  become: yes
+  tags: docker
+
+- name: Make docker-compose executable
+  file:
+    path: /usr/local/bin/docker-compose
+    mode: u+x,g+x
+  become: yes
+  tags: docker

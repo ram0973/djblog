@@ -1,0 +1,50 @@
+---
+# Install and configure postgres
+
+- name: Install postgresql
+  apt:
+    name: ['postgresql', 'python3-psycopg2']
+    state: latest
+    cache_valid_time: 3600
+  become: yes
+  tags: psql
+
+- name: Start and enable postgresql
+  systemd: name=postgresql enabled=yes state=started
+  become: yes
+  tags: psql
+
+- name: Create postgresql database
+  postgresql_db: name={{ db_name }} encoding=UTF-8 lc_collate={{ server_locale }} lc_ctype={{ server_locale }}
+  become_user: postgres
+  become: yes
+  tags: psql
+
+- name: Create postgresql user
+  postgresql_user: db={{ db_name }} name={{ db_user }} password={{ db_password }} priv=ALL
+    role_attr_flags="NOSUPERUSER,NOCREATEROLE,LOGIN,CREATEDB"
+  # CREATEDB - for tests, LOGIN - for migrations
+  become: yes
+  become_user: postgres
+  tags: psql
+
+- name : Grant privileges to usage on schema public
+  shell: psql {{ db_name }} -c "GRANT USAGE ON SCHEMA public TO {{ db_user }};"
+  become: yes
+  become_user: postgres
+  tags: psql
+
+- name : Grant privileges to postgresql tables
+  shell: psql -c "GRANT ALL PRIVILEGES ON DATABASE {{ db_name }} TO {{ db_user }};"
+  become: yes
+  become_user: postgres
+  tags: psql
+
+- name: reload postgres
+  service: name=postgresql.service state=reloaded enabled=yes
+  become: yes
+  tags: psql
+
+- set_fact:
+    db_url: postgresql://{{db_user}}:{{db_password}}@localhost/{{db_name}}
+  tags: psql

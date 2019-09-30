@@ -1,0 +1,61 @@
+---
+# Configure gunicorn server
+
+- name: Add gunicorn user
+  user: name={{ user_gunicorn }} system=yes create_home=no group=nogroup
+  become: yes
+  tags: gunicorn
+
+- name: Render gunicorn systemd service file
+  template: src=gunicorn.service.j2 dest=/etc/systemd/system/{{ app_name }}.service
+  become: yes
+  tags: gunicorn
+
+- name: Set default ACL rights to app folder for gunicorn
+  acl: default=yes entity={{ user_gunicorn }} etype=user follow=no path={{ app_dir }} permissions=rX state=present
+  become: yes
+  tags: gunicorn
+
+- name: Set ACL rights to app folder for gunicorn
+  acl: entity={{ user_gunicorn }} etype=user follow=no path={{ app_dir }} permissions=rX recursive=yes state=present
+  become: yes
+  tags: gunicorn
+
+- name: Set default ACL rights to writable folders for gunicorn
+  acl: default=yes entity={{ user_gunicorn }} etype=user follow=no path={{ app_dir }}/public/{{ item }} permissions=rwX
+       state=present
+  with_items: ['media',  'uploads']
+  become: yes
+  tags: gunicorn
+
+- name: Set ACL rights to writable folders for gunicorn
+  acl: entity={{ user_gunicorn }} etype=user follow=no path={{ app_dir }}/public/{{ item }} permissions=rwX
+       recursive=yes state=present
+  with_items: ['media',  'uploads']
+  become: yes
+  tags: gunicorn
+
+- name: Create gunicorn unix socket folder
+  file: path={{ app_dir }}/run state=directory
+  tags: gunicorn
+
+- name: Set ACL rights to gunicorn unix socket folder
+  acl: entity={{ user_gunicorn }} etype=user follow=no path={{ app_dir }}/run permissions=rwX recursive=yes state=present
+  become: yes
+  tags: gunicorn
+
+- name: Set default ACL rights to gunicorn unix socket folder
+  acl: default=yes entity={{ user_gunicorn }} etype=user follow=no path={{ app_dir }}/run permissions=rwX state=present
+  become: yes
+  tags: gunicorn
+
+- name: Reexec systemd daemon
+  systemd:
+    daemon_reexec: yes
+  become: yes
+  tags: gunicorn
+
+- name: Restart gunicorn service
+  systemd: daemon_reload=yes name={{ app_name }}.service state=restarted enabled=yes
+  become: yes
+  tags: gunicorn

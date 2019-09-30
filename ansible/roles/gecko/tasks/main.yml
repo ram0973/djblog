@@ -1,0 +1,22 @@
+---
+- name: Set latest geckodriver version
+  set_fact:
+    geckodriver_version: "0.25.0"
+  tags: gecko
+
+- name: Download the gecko driver
+  get_url: url="https://github.com/mozilla/geckodriver/releases/download/v{{ geckodriver_version }}/geckodriver-v{{ geckodriver_version }}-linux64.tar.gz" dest=/tmp mode=0777
+  tags: gecko
+
+- name: Install the gecko driver
+  unarchive: src="/tmp/geckodriver-v{{ geckodriver_version }}-linux64.tar.gz" dest=/usr/local/bin/ mode=0755 copy=no
+  become: yes
+  tags: gecko
+
+- name: Install firefox, ca-certificates, curl
+  apt:
+    name: ['firefox', 'ca-certificates', 'curl']
+    state: latest
+    cache_valid_time: 3600
+  become: yes
+  tags: gecko

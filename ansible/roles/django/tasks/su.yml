@@ -1,0 +1,17 @@
+---
+# Create django superuser
+
+- name: fix python UnicodeEncodeError
+  shell: export PYTHONIOENCODING="UTF-8"
+  tags: su
+
+- name: Create django superuser
+  django_manage:
+    virtualenv: "{{ venv_dir }}"
+    app_path: "{{ app_dir }}"
+    command: createcustomsuperuser --email {{ django_su_email }} --password {{ django_su_password }}
+  tags: su
+
+- debug:
+    msg: "Super admin credentials: {{ django_su_email }} : {{ django_su_password }}"
+  tags: su

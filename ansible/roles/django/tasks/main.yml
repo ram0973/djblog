@@ -1,0 +1,12 @@
+- include: manage_py_fix.yml
+  tags: django
+- include: requirements.yml
+  tags: django
+- include: dotenv.yml
+  tags: django
+- include: migrations.yml
+  tags: django
+- include: static.yml
+  tags: django
+- include: su.yml
+  tags: django

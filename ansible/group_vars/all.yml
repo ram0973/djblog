@@ -1,0 +1,22 @@
+---
+# app
+app_domain: localhost
+app_name: djblog
+base_dir: /webapps
+app_dir: '{{ base_dir }}/{{ app_name }}'
+repo: https://github.com/ram0973/djblog
+
+# server
+ansible_python_interpreter: '/usr/bin/python3'
+server_locale: ru_RU.UTF-8
+server_timezone: UTC
+ssh_dir: ~/.ssh
+
+# common variables
+django_settings_module: core.settings
+
+# db
+db_name: '{{ app_name }}'
+db_user: '{{ app_name }}'
+db_password: '{{ app_name }}'
+db_url: postgresql://{{db_user}}:{{db_password}}@localhost/{{db_name}}

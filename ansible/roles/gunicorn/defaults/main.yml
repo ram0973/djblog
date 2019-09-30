@@ -1,0 +1,2 @@
+user_gunicorn: '{{ app_name }}'
+wsgi_module: core.wsgi
