@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/ram0973/djblog/branch/master/graph/badge.svg)](https://codecov.io/gh/ram0973/djblog)
 
 # About
-This is simple Python/Django blog
+This is simple Python/Django blog. Download last release [here](https://github.com/ram0973/djblog/releases/)
 
 ## Features:
 - Run dev/staging virtual machines easy with Vagrant
@@ -27,6 +27,9 @@ This is simple Python/Django blog
 Sometimes Ansible throw apt or dns resolution errors.  
 If just play playbook again, error will gone.   
 Don't know how to cure yet.
+
+## History:
+1. First release on 30.09.2019
 
 ## TODO (in plans, may be changed): 
 - Move to new config on Sentry
