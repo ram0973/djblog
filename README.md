@@ -230,7 +230,7 @@ Open your browser and go to https://your_domain/
 ## Configure Pycharm
 
 <details><summary>View screenshots</summary>
-<img src="https://github.com/ram0973/djblog/blob/master/screenshots/vagrant_sftp_connection.png" width="623" height="711">
+<img src="https://github.com/ram0973/djblog/blob/master/screenshots/vagrant_sftp_connection.png" width="597" height="504">
 </details>
 
 Pycharm: configure deployment to Vagrant virtual machine: 
