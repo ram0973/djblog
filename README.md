@@ -186,6 +186,7 @@ $ source venv/bin/activate
 $ fab -l
 $ fab -e -H dev deploy-local --env=dev
 $ fab -e -H staging deploy-local --env=staging
+$ fab -H dev,staging,prod -- uname -a # run some command oh host(s)
 ```
 Ansible:  
 ```
@@ -222,7 +223,14 @@ $ sudo crontab -e
 Next on WSL prompt:
 ```bash
 $ ssh-copy-id -i ~/.ssh/id_rsa.pub prod
-$ ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --limit prod# production, one host
+```
+Fabric:
+```bash
+$ fab -e -H prod deploy-prod
+```
+Ansible:
+```bash
+$ ansible-playbook ansible/deploy.yml -i ansible/hosts.ini --limit prod # one host
 ```
 
 Open your browser and go to https://your_domain/
@@ -288,7 +296,9 @@ djblog=# \h # help
 djblog=# \l # list databases
 djblog=# \d # list relations (tables/sequnces)
 djblog=# \du # list user roles
+# IMPORTANT: user postgres MUST be SUPERUSER
 djblog=# \z # list privileges
+# IMPORTANT: CREATEDB - for tests, LOGIN - for migrations
 # https://www.postgresql.org/docs/current/sql-grant.html
 djblog=# select * from accounts_user; # show users
 djblog=# \q # quit
