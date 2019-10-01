@@ -3,8 +3,6 @@
   hosts:
     dev_servers
     staging_servers
-  vars_files:
-    - group_vars/all.yml
   roles:
     - prepare_server
     - { role: rsync, when: env == 'dev' }
