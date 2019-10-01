@@ -22,8 +22,12 @@
 
 - name: Create postgresql user
   postgresql_user: db={{ db_name }} name={{ db_user }} password={{ db_password }} priv=ALL
-    role_attr_flags="NOSUPERUSER,NOCREATEROLE,LOGIN,CREATEDB"
-  # CREATEDB - for tests, LOGIN - for migrations
+  become: yes
+  become_user: postgres
+  tags: psql
+
+- name: Alter postgresql user
+  shell: psql {{ db_name }} -c "ALTER USER {{ db_user }} WITH NOSUPERUSER NOCREATEROLE LOGIN CREATEDB;"
   become: yes
   become_user: postgres
   tags: psql
@@ -34,8 +38,32 @@
   become_user: postgres
   tags: psql
 
-- name : Grant privileges to postgresql tables
+- name : Grant privileges to postgresql database
   shell: psql -c "GRANT ALL PRIVILEGES ON DATABASE {{ db_name }} TO {{ db_user }};"
+  become: yes
+  become_user: postgres
+  tags: psql
+
+- name : Grant privileges to postgresql database tables
+  shell: psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO {{ db_user }};"
+  become: yes
+  become_user: postgres
+  tags: psql
+
+- name : Grant privileges to postgresql database sequences
+  shell: psql -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO {{ db_user }};"
+  become: yes
+  become_user: postgres
+  tags: psql
+
+- name : Grant privileges to postgresql database sequences
+  shell: psql -c "GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO {{ db_user }};"
+  become: yes
+  become_user: postgres
+  tags: psql
+
+- name : Grant default privileges to postgresql database tables
+  shell: psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO {{ db_user }};"
   become: yes
   become_user: postgres
   tags: psql
