@@ -30,9 +30,8 @@ Don't know how to cure yet.
 
 ## History:
 1. First release on 30.09.2019
-
+2. Moved to new config on Sentry
 ## TODO (in plans, may be changed): 
-- Move to new config on Sentry
 - Docker version (add ansible-docker, fabfile-docker, Makefile)
 - CI with CircleCI
 - Add db backup/restore
