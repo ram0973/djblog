@@ -29,7 +29,7 @@ DJANGO_SECRET_KEY_LENGTH = 50
 DOTENV_FILE = '{}/core/.env'.format(APP_DIR)
 REPO = 'https://github.com/ram0973/djblog'
 
-SUPERUSER_EMAIL = 'admin@' + APP_DOMAIN
+SUPERUSER_EMAIL = 'admin@{}'.format(APP_DOMAIN)
 SUPERUSER_PASSWORD = 'pass'
 
 DB_NAME = APP_NAME
@@ -127,15 +127,14 @@ def install_requirements(ctx, env):
 
 
 @task
-def configure_env_file(ctx, env, db_url, domain):
+def configure_env_file(ctx, env, db_url, domain, sentry_dsn):
     """ Command: $ fab -e -H host configure-env-file --env=ENV --db_url=DB_URL \
---domain=DOMAIN """
+--domain=DOMAIN --sentry_dsn=SENTRY_DSN """
     check_envs(env)
     env_file_exists = ctx.run('test -e {}'.format(DOTENV_FILE), warn=True)
     if env_file_exists:
         ctx.run('mv -f {} {}.bak'.format(DOTENV_FILE, DOTENV_FILE))
     django_secret_key = get_django_secret_key(DJANGO_SECRET_KEY_LENGTH)
-    sentry_dsn = input('Enter Sentry DSN: ') if env == ENV_PROD else ''
     payload = {'django_secret_key': django_secret_key,
                'django_settings_module': DJANGO_SETTINGS_MODULE,
                'env': env, 'db_url': db_url, 'app_domain': domain,
@@ -203,25 +202,27 @@ db_password=DB_PASSWORD db_name=DB_NAME """
     ctx.run('sudo -u postgres psql -c '
             '"GRANT ALL PRIVILEGES ON DATABASE {} TO {};"'
             .format(db_name, db_user))
-    #ctx.run('sudo -u postgres psql {} -c "grant all on all tables in schema '
-    #        'public to {};"'.format(db_name, db_user))
-    #ctx.run('sudo -u postgres psql {} -c "grant all on all sequences in schema '
-    #        'public to {};"'.format(db_name, db_user))
-    #ctx.run('sudo -u postgres psql {} -c "grant all on all functions in schema '
-    #        'public to {};"'.format(db_name, db_user))
+    ctx.run('sudo -u postgres psql {} -c "GRANT ALL ON ALL TABLES IN SCHEMA '
+            'public TO {};"'.format(db_name, db_user))
+    ctx.run('sudo -u postgres psql {} -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA '
+            'public TO {};"'.format(db_name, db_user))
+    ctx.run('sudo -u postgres psql {} -c "GRANT ALL ON ALL FUNCTIONS IN SCHEMA '
+            'public TO {};"'.format(db_name, db_user))
+    ctx.run('sudo -u postgres psql -c "ALTER DEFAULT PRIVILEGES IN SCHEMA '
+            'public GRANT ALL ON TABLES TO {};"'.format(db_user))
     ctx.run('sudo systemctl restart postgresql')
 
 
 @task
 def install_nginx_mainline(ctx):
     """ Command: $ fab -e -H host install-nginx-mainline """
+    ctx.run('sudo apt-get remove nginx -y')
     facts = gathering_facts(ctx)
     ctx.run('curl -fsSL https://nginx.org/keys/nginx_signing.key |'
             ' sudo apt-key add -')
     ctx.run('sudo add-apt-repository "deb http://nginx.org/packages/mainline/{}'
             ' {} nginx"'
             .format(facts['os'], facts['release']))
-    ctx.run('sudo apt-get remove nginx -y')
     ctx.run('sudo apt-get install nginx -y')
     ctx.run('sudo rm -f /etc/nginx/conf.d/default.conf', warn=True)
     ctx.run('sudo systemctl enable nginx')
@@ -286,8 +287,6 @@ def create_django_su(ctx, email, password):
     ctx.run('cd {} && source {}/bin/activate && export PYTHONIOENCODING="UTF-8"'
             ' && {} manage.py createcustomsuperuser --email {} --password {}'
             .format(APP_DIR, VENV_DIR, VENV_PYTHON, email, password), pty=True)
-    print('Default password for {} and {}: '.format(ENV_DEV, ENV_STAGING),
-          SUPERUSER_PASSWORD)
 
 
 @task
@@ -299,12 +298,9 @@ def gecko(ctx):
             .format(GECKO_VERSION, GECKO_VERSION))
 
 
-@task
 def deploy(ctx, env, repo, db_user, db_password, db_name, domain, su_email,
-           su_password):
-    """ Command: $ fab -e -H host deploy --env=ENV --repo=REPO \
---db_user=DB_USER --db_password=DB_PASSWORD --db_name=DB_NAME \
---domain=DOMAIN --su_email=SUPERUSER_EMAIL --su_password=SUPERUSER_PASSWORD """
+           su_password, sentry_dsn):
+    print('Task started')
     db_url = DB_URL.format(db_user, db_password, db_name)
     check_envs(env)
     prepare_server(ctx)
@@ -313,7 +309,7 @@ def deploy(ctx, env, repo, db_user, db_password, db_name, domain, su_email,
     elif env == ENV_STAGING or env == ENV_PROD:
         clone_git_src(ctx, repo)
     install_requirements(ctx, env)
-    configure_env_file(ctx, env, db_url, domain)
+    configure_env_file(ctx, env, db_url, domain, sentry_dsn)
     if env == ENV_STAGING or env == ENV_PROD:
         configure_gunicorn(ctx, env)
     install_psql(ctx)
@@ -325,14 +321,34 @@ def deploy(ctx, env, repo, db_user, db_password, db_name, domain, su_email,
     create_django_su(ctx, su_email, su_password)
     if env == ENV_DEV or env == ENV_STAGING:
         gecko(ctx)
+    print('Task finished')
 
 @task
 def deploy_local(ctx, env, repo=REPO, db_user=DB_USER, db_password=DB_PASSWORD,
                  db_name=DB_NAME, domain=APP_DOMAIN, su_email=SUPERUSER_EMAIL,
-                 su_password=SUPERUSER_PASSWORD):
+                 su_password=SUPERUSER_PASSWORD, sentry_dsn=''):
     """ Command: $ fab -e -H host deploy-local --env=ENV{dev,staging} """
     deploy(ctx, env, repo, db_user, db_password, db_name, domain, su_email,
-           su_password)
+           su_password, sentry_dsn)
+
+
+def input_default(name, default_value):
+    user_input = input('Enter {}:[{}] '.format(name, default_value))
+    return default_value if not user_input else user_input
+
+
+@task
+def deploy_prod(ctx):
+    """ Command: $ fab -e -H host deploy-prod """
+    domain = input_default('domain', APP_DOMAIN)
+    db_name = input_default('db name', DB_USER)
+    db_user = input_default('db user', DB_USER)
+    db_password = input_default('db password', DB_PASSWORD)
+    sentry_dsn = input('Sentry DSN: ')
+    su_email = input_default('superuser email', 'admin@{}'.format(domain))
+    su_password = input_default('superuser password', SUPERUSER_PASSWORD)
+    deploy(ctx, ENV_PROD, REPO, db_user, db_password, db_name, domain, su_email,
+           su_password, sentry_dsn)
 
 
 @task
