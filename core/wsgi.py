@@ -8,7 +8,6 @@ https://docs.djangoproject.com/en/2.0/howto/deployment/wsgi/
 """
 
 import os
-from raven.contrib.django.raven_compat.middleware.wsgi import Sentry
 from configurations.wsgi import get_wsgi_application
 
 from dotenv import load_dotenv
@@ -17,4 +16,4 @@ load_dotenv()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 os.environ.setdefault("DJANGO_CONFIGURATION", "Dev")
 
-application = Sentry(get_wsgi_application())
+application = get_wsgi_application()
