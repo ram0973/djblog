@@ -42,6 +42,12 @@
   become: yes
   tags: nginx
 
+- name: Remove default nginx site symlink
+  file:
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
+  tags: nginx
+
 - name: Render nginx conf file
   template: src={{ role_path }}/templates/nginx.conf.j2 dest=/etc/nginx/conf.d/{{ app_domain }}.{{ app_name }}.conf
   become: yes
