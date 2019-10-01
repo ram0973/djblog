@@ -5,13 +5,26 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 import os
 import time
-import raven
+import logging
+import sentry_sdk
 from django.utils.translation import gettext_lazy as _
 from configurations import Configuration, values
 from dotenv import load_dotenv
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 load_dotenv()
+SENTRY_LOG_LEVEL = logging.INFO
+sentry_logging = LoggingIntegration(
+    level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
+    event_level=logging.ERROR,  # Send errors as events
+)
 
+sentry_sdk.init(
+    dsn=values.Value(environ_name='SENTRY_DSN'),
+    integrations=[sentry_logging, DjangoIntegration()],
+    environment=values.Value(environ_name='CONFIGURATION'),
+)
 
 class Common(Configuration):
     """ common settings """
@@ -145,6 +158,30 @@ class Common(Configuration):
         'living': 'false',  # to enable/disable live updates in preview
     }
 
+    # LOGGING
+    # ------------------------------------------------------------------------------
+    # https://docs.djangoproject.com/en/dev/ref/settings/#logging
+    # See https://docs.djangoproject.com/en/dev/topics/logging for
+    # more details on how to customize your logging configuration.
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "verbose": {
+                "format": "%(levelname)s %(asctime)s %(module)s "
+                          "%(process)d %(thread)d %(message)s"
+            }
+        },
+        "handlers": {
+            "console": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "verbose",
+            }
+        },
+        "root": {"level": "INFO", "handlers": ["console"]},
+    }
+
 
 class Dev(Common):
     """ development settings """
@@ -158,8 +195,6 @@ class Staging(Common):
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
     DEBUG = False
     TEMPLATE_DEBUG = False
-    # RAVEN_CONFIG = copy.deepcopy(Common.RAVEN_CONFIG)
-    # RAVEN_CONFIG['environment'] = 'staging'
 
 
 class Prod(Common):
@@ -167,59 +202,3 @@ class Prod(Common):
     ALLOWED_HOSTS = [values.Value(environ_name='DOMAIN'), ]
     DEBUG = False
     TEMPLATE_DEBUG = False
-    # RAVEN_CONFIG = copy.deepcopy(Common.RAVEN_CONFIG)
-    # RAVEN_CONFIG['environment'] = 'prod'
-    RAVEN_CONFIG = {
-        'dsn': values.Value(environ_name='SENTRY_DSN'),
-        'release': raven.fetch_git_sha(Common.BASE_DIR),
-        'environment': 'Prod',
-        'ignore_urls': ['http://localhost/', '127.0.0.1']
-    }
-    INSTALLED_APPS = Common.INSTALLED_APPS + \
-        ['raven.contrib.django.raven_compat']
-    MIDDLEWARE = ['raven.contrib.django.raven_compat.middleware.'
-                  'Sentry404CatchMiddleware'] + Common.MIDDLEWARE
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': True,
-        'root': {
-            'level': 'WARNING',
-            'handlers': ['sentry'],
-        },
-        'formatters': {
-            'verbose': {
-                'format': '%(levelname)s %(asctime)s %(module)s '
-                          '%(process)d %(thread)d %(message)s'
-            },
-        },
-        'handlers': {
-            'sentry': {
-                'level': 'ERROR',  # or ERROR, WARNING, INFO, etc.
-                'class': 'raven.contrib.django.raven_compat.handlers.'
-                         'SentryHandler',
-                'tags': {'custom-tag': 'x'},
-            },
-            'console': {
-                'level': 'DEBUG',
-                'class': 'logging.StreamHandler',
-                'formatter': 'verbose'
-            }
-        },
-        'loggers': {
-            'django.db.backends': {
-                'level': 'ERROR',
-                'handlers': ['console'],
-                'propagate': False,
-            },
-            'raven': {
-                'level': 'DEBUG',
-                'handlers': ['console'],
-                'propagate': False,
-            },
-            'sentry.errors': {
-                'level': 'DEBUG',
-                'handlers': ['console'],
-                'propagate': False,
-            },
-        },
-    }

@@ -1,7 +1,6 @@
 dj-database-url==0.5.0
 Django==2.2.4
 django-configurations==2.1
-raven==6.10.0
 psycopg2-binary==2.8.3
 python_dotenv==0.10.3
 markdown2==2.3.8
@@ -22,3 +21,4 @@ pyOpenSSL==19.0.0
 ipython==7.7.0
 cryptography==2.7
 patchwork==1.0.1
+sentry-sdk==0.12.2
