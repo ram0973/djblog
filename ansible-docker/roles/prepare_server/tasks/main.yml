@@ -1,0 +1,51 @@
+---
+# Initial server configuration
+
+- name: Make root tmp folder for ansible
+  file:
+    path: /root/.ansible/tmp
+    state: directory
+    recurse: yes
+    mode: 0700
+  become: yes
+  tags: prepare_server
+
+- name: Update apt cache
+  apt: update_cache=true cache_valid_time=3600
+  become: yes
+  tags: prepare_server
+
+- name: Install required packages
+  apt:
+    name: ['aptitude', 'git']
+    state: latest
+    cache_valid_time: 3600
+  become: yes
+  tags: prepare_server
+
+- name: Set server timezone
+  command: timedatectl set-timezone {{ server_timezone }}
+  become: yes
+  tags: prepare_server
+
+- name: Set server locale
+  command: localectl set-locale LANG={{ server_locale }}
+  become: yes
+  tags: prepare_server
+
+- name: Creates app directory
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+  become: yes
+  tags: prepare_server
+
+- name: Set default ACL rights to app folder for ansible user
+  acl: default=yes entity={{ ansible_user_id }} etype=user follow=no path={{ app_dir }} permissions=rwX state=present
+  become: yes
+  tags: prepare_server
+
+- name: Set ACL rights to app folder for ansible user
+  acl: entity={{ ansible_user_id }} etype=user follow=no path={{ app_dir }} permissions=rwX recursive=yes state=present
+  become: yes
+  tags: prepare_server

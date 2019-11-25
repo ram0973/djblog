@@ -1,0 +1,14 @@
+---
+# Clone or pull the repo
+
+- name: Install git
+  apt:
+    name: git
+    state: latest
+    cache_valid_time: 3600
+  become: yes
+  tags: git
+
+- name: Git clone or pull the latest code
+  git: repo={{ repo }} dest={{ app_dir }} force=yes
+  tags: git

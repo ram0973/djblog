@@ -1,0 +1,10 @@
+---
+- name: This Ansible Playbook deploys whole app
+  hosts:
+    dev_servers
+    staging_servers
+  roles:
+    - prepare_server
+    - { role: rsync, when: env == 'dev' }
+    - { role: git, when: env == 'staging' }
+    - docker

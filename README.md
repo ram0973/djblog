@@ -5,9 +5,11 @@
 [![codecov](https://codecov.io/gh/ram0973/djblog/branch/master/graph/badge.svg)](https://codecov.io/gh/ram0973/djblog)
 
 # About
-This is simple Python/Django blog. Download last release [here](https://github.com/ram0973/djblog/releases/)
+This is simple Python/Django blog. Download last release [here](https://github.com/ram0973/djblog/releases/)  
+Designed to be a testing site for web/devops technologies.
 
 ## Features:
+
 - Run dev/staging virtual machines easy with Vagrant
 - Deploy via Ansible and Fabric
 - Nginx with TLS 1.3, even on dev/staging (valid certificates for local development supplied)
@@ -31,6 +33,7 @@ Don't know how to cure yet.
 ## History:
 1. First release on 30.09.2019
 2. Moved to new config on Sentry
+
 ## TODO (in plans, may be changed): 
 - Docker version (add ansible-docker, fabfile-docker, Makefile)
 - CI with CircleCI
@@ -46,6 +49,7 @@ Don't know how to cure yet.
 - Translation to Russian
 - Admin SPA with VueJS
 - Add powershell bootstrap script for Windows
+- Look to Traefic
 
 # Prepare development environment on Windows 10
 
@@ -127,6 +131,7 @@ Next in WSL prompt:
 # You must already setup your environment,
 # for example, https://github.com/ram0973/dotfiles
 
+$ ln -s /mnt/c/Users/USERNAME/.ssh ~/.ssh
 $ sudo ln -sf /mnt/d/webapps/ /webapps # only once, /mnt/d/webapps/ is path to d:\webapps in WSL 
 $ cd /webapps/djblog
 # check existing ssh keys
@@ -134,7 +139,7 @@ $ ls -al ~/.ssh
 
 # create key if needed or skip and copy your key to ~/.ssh/id_rsa, if existed
 $ ssh-keygen -t rsa -b 4096 -C "your_mail@your_domain"
-$ chmod 600 ~/.ssh/config
+$ chmod 400 ~/.ssh/config
 $ chmod 400 ~/.ssh/id_rsa
 
 # Ssh-agent: add next two lines to ~/.bashrc
