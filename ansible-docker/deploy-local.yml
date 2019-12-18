@@ -8,3 +8,4 @@
     - { role: rsync, when: env == 'dev' }
     - { role: git, when: env == 'staging' }
     - docker
+    - postgresql

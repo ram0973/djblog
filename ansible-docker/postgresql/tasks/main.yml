@@ -1,7 +1,7 @@
 ---
 # Install and configure postgres
 
-- name: Install postgresql
+- name: Install python3 connector to postgresql
   apt:
     name: ['python3-psycopg2']
     state: latest
@@ -9,12 +9,12 @@
   become: yes
   tags: psql
 
-- name: Run database container
+- name: Run postgresql container
   docker_container:
-    name: 'psql'
-    image: 'postgres:12.0-alpine'
-    state: 'started'
-    api_version: 3.7
+    name: "psql"
+    image: "postgres:12.0-alpine"
+    state: "started"
+    api_version: "3.7"
     detach: yes
     keep_volumes: yes
     ports:
@@ -23,10 +23,11 @@
     volumes:
       postgres_data:/var/lib/postgresql/data/pgdata
     env:
-      POSTGRESQL_USER: {{db_user}}
-      POSTGRESQL_PASSWORD: {{db_password}}
-      POSTGRESQL_DATABASE: {{db_name}}
+      POSTGRESQL_USER: "{{db_user}}"
+      POSTGRESQL_PASSWORD: "{{db_password}}"
+      POSTGRESQL_DATABASE: "{{db_name}}"
       PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_INITDB_ARGS: "--data-checksums"
   tags: psql
 
 - set_fact:

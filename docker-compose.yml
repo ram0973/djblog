@@ -2,7 +2,7 @@
 version: "3.7"
 services:
   djblog:
-    image: python:3.8.0-slim-buster
+    image: python:3.8.0-alpine3.10
     container_name: djblog
     restart: unless-stopped
     working_dir: /src
@@ -14,7 +14,7 @@ services:
         source: .
         target: /src
   nginx:
-    image: nginx:1.17.5-alpine
+    image: nginx:1.17.6-alpine
     container_name: djblog-nginx
     ports:
       - "80:80"
