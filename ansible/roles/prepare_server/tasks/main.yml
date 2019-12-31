@@ -18,7 +18,7 @@
 - name: Install required packages
   apt:
     name: ['aptitude', 'git', 'make', 'python3-venv', 'python-setuptools',
-           'python3-docutils', 'language-pack-ru', 'acl']
+           'python3-docutils', 'language-pack-ru', 'acl', 'python3.8', 'python3.8-venv']
     state: latest
     cache_valid_time: 3600
   become: yes
