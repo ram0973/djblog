@@ -17,7 +17,7 @@ Designed to be a testing site for web/devops technologies.
 - Run on dev: Nginx + Django runserver
 - Run on staging/production: Nginx + Gunicorn + systemd
 - Unit tests/Functional tests via Selenium & pytest (just few tests yet)
-- Logs with Sentry (old configs format yet)
+- Logs with Sentry
 - Makefile for console commands
 - Design with Bootstrap 4
 
@@ -26,7 +26,7 @@ Designed to be a testing site for web/devops technologies.
 - Accounts: custom user model via AbstractBaseUser, Custom superuser create command
 
 ### Known bugs:
-Sometimes Ansible throw apt or dns resolution errors.  
+Sometimes Ansible throws apt or dns resolution errors.  
 If just play playbook again, error will gone.   
 Don't know how to cure yet.
 
