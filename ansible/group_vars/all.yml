@@ -8,7 +8,7 @@ repo: https://github.com/ram0973/djblog
 
 # server
 ansible_python_interpreter: '/usr/bin/python3'
-project_python_interpreter: '/usr/bin/python3.8'
+project_python_interpreter: '/usr/bin/python3'
 server_locale: ru_RU.UTF-8
 server_timezone: UTC
 ssh_dir: ~/.ssh

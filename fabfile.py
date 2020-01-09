@@ -50,6 +50,7 @@ VENV_PYTHON = '{}/bin/python3'.format(VENV_DIR)
 
 GECKO_VERSION = '0.25.0'
 
+
 def render_template(templates_dir, template_name, payload):
     env = Environment(loader=FileSystemLoader(templates_dir))
     template = env.get_template(template_name)
