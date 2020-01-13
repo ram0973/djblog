@@ -26,6 +26,7 @@ sentry_sdk.init(
     environment=values.Value(environ_name='CONFIGURATION'),
 )
 
+
 class Common(Configuration):
     """ common settings """
     AUTH_USER_MODEL = 'accounts.User'
@@ -61,6 +62,7 @@ class Common(Configuration):
         'django.contrib.admindocs',
         'django_extensions',
         'martor',
+        'mptt',
 
         'core',
         'accounts.apps.AccountsConfig',

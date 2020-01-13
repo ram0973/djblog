@@ -188,8 +188,8 @@ def configure_psql(ctx, db_user, db_password, db_name):
 db_password=DB_PASSWORD db_name=DB_NAME """
     ctx.run('sudo sed -i \"s/#listen_address.*/listen_addresses'
             ' \'localhost\'/\" /etc/postgresql/10/main/postgresql.conf')
-    ctx.run('sudo -u postgres createdb {} -E UTF-8 lc_collate={} lc_ctype={}'
-            .format(db_name, SERVER_LOCALE, SERVER_LOCALE), warn=True)
+    ctx.run('sudo -u postgres createdb {} -E UTF-8'.format(db_name),
+            warn=True)
     ctx.run('sudo -u postgres createuser {}'
             .format(db_user), warn=True)
     ctx.run('sudo -u postgres psql -c '
@@ -323,6 +323,7 @@ def deploy(ctx, env, repo, db_user, db_password, db_name, domain, su_email,
     if env == ENV_DEV or env == ENV_STAGING:
         gecko(ctx)
     print('Task finished')
+
 
 @task
 def deploy_local(ctx, env, repo=REPO, db_user=DB_USER, db_password=DB_PASSWORD,

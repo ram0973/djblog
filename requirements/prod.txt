@@ -1,3 +1,4 @@
+django-mptt==0.10.0
 dj-database-url==0.5.0
 django==2.*
 django-configurations==2.1

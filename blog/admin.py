@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib import admin
 from martor.widgets import AdminMartorWidget
-from .models import Post
-from .models import Tag
+from .models import Post, Category, Tag
+from mptt.admin import MPTTModelAdmin
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -17,4 +17,5 @@ class PostAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Post, PostAdmin)
+admin.site.register(Category, MPTTModelAdmin)
 admin.site.register(Tag)

@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 from markdown2 import markdown
 from martor.models import MartorField
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 def get_image_upload_path(instance, filename):
@@ -27,6 +28,10 @@ class PostQuerySet(models.QuerySet):
 
 class Post(models.Model):
     CONTENT_SEPARATOR = '<!--MORE-->'
+    category = TreeForeignKey('Category',
+                              null=True,
+                              blank=True,
+                              on_delete=models.CASCADE)
     author = models.ForeignKey(get_user_model(),
                                editable=False,
                                verbose_name=_('Author'),
@@ -101,6 +106,42 @@ class Post(models.Model):
             self.html_content = markdown(self.markdown_content, extras=extras)
 
         super(Post, self).save()
+
+
+class Category(MPTTModel):
+    name = models.CharField(max_length=50, unique=True)
+    parent = TreeForeignKey('self', null=True, blank=True,
+                            related_name='children',
+                            db_index=True,
+                            on_delete=models.CASCADE)
+    slug = models.SlugField()
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    class Meta:
+        unique_together = ('parent', 'slug',)
+        verbose_name_plural = 'categories'
+
+    def get_slug_list(self):
+        try:
+            ancestors = self.get_ancestors(include_self=True)
+        except:
+            ancestors = []
+        else:
+            ancestors = [i.slug for i in ancestors]
+        slugs = []
+        for i in range(len(ancestors)):
+            slugs.append('/'.join(ancestors[:i + 1]))
+        return slugs
+
+    def save(self, *args, **kwargs):
+        slug_list = self.get_slug_list(self)
+
+        super(Category, self).save()
+
+    def __str__(self):
+        return self.name
 
 
 class Tag(models.Model):
