@@ -35,7 +35,7 @@ class Post(models.Model):
     author = models.ForeignKey(get_user_model(),
                                editable=False,
                                verbose_name=_('Author'),
-                               related_name='all',  # user.entries.all()
+                               related_name='posts',  # user.entries.posts()
                                on_delete=models.CASCADE)
     image = models.ImageField(upload_to=get_image_upload_path,
                               blank=True,
@@ -44,7 +44,7 @@ class Post(models.Model):
     title = models.CharField(max_length=255,
                              help_text=_('255 characters'),
                              verbose_name=_('Title'))
-    slug = models.SlugField(unique_for_date='pub_date',
+    slug = models.SlugField(unique_for_date='created_at',
                             help_text=_('Post slug, unique for post date'),
                             verbose_name=_('Slug'))
     html_excerpt = models.TextField(editable=False,
@@ -56,10 +56,10 @@ class Post(models.Model):
                                   verbose_name=_('Tags'),
                                   blank=True,
                                   related_name='all')  # tag.entries.all()
-    pub_date = models.DateTimeField(auto_now=False,
-                                    auto_now_add=False,
-                                    default=timezone.now,
-                                    verbose_name=_('Publication date'))
+    created_at = models.DateTimeField(auto_now=False,
+                                      auto_now_add=False,
+                                      default=timezone.now,
+                                      verbose_name=_('Publication date'))
     is_published = models.BooleanField(default=False,
                                        verbose_name=_('Published'))
     hits = models.IntegerField(default=0, editable=False)
@@ -68,15 +68,15 @@ class Post(models.Model):
     class Meta:
         verbose_name = _('Post')
         verbose_name_plural = _('Posts')
-        ordering = ('-pub_date',)
+        ordering = ('-created_at',)
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse('blog:post-details', args=[
-            int(self.pub_date.year), int(self.pub_date.month),
-            int(self.pub_date.day), str(self.slug)
+            int(self.created_at.year), int(self.created_at.month),
+            int(self.created_at.day), str(self.slug)
         ])
 
     def add_hits(self):
@@ -109,39 +109,37 @@ class Post(models.Model):
 
 
 class Category(MPTTModel):
-    name = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=50, unique=True)
     parent = TreeForeignKey('self', null=True, blank=True,
                             related_name='children',
                             db_index=True,
                             on_delete=models.CASCADE)
     slug = models.SlugField()
+    path = models.TextField(unique=True, null=True, editable=False)  # full category path
 
     class MPTTMeta:
-        order_insertion_by = ['name']
+        order_insertion_by = ['title']
 
     class Meta:
         unique_together = ('parent', 'slug',)
         verbose_name_plural = 'categories'
 
-    def get_slug_list(self):
+    def get_path(self):
         try:
             ancestors = self.get_ancestors(include_self=True)
-        except:
+        except self.DoesNotExist:
             ancestors = []
         else:
-            ancestors = [i.slug for i in ancestors]
-        slugs = []
-        for i in range(len(ancestors)):
-            slugs.append('/'.join(ancestors[:i + 1]))
-        return slugs
+            ancestors = [item.slug for item in ancestors]
+        return '/'.join(ancestors)
 
     def save(self, *args, **kwargs):
-        slug_list = self.get_slug_list(self)
-
+        super(Category, self).save()
+        self.path = self.get_path()
         super(Category, self).save()
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Tag(models.Model):

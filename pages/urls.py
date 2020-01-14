@@ -3,5 +3,7 @@ from . import views
 
 app_name = 'pages'
 urlpatterns = [
-    path('pages/<slug:slug>/', views.ViewPage, name='page'),
+    path('<path:path>/', views.PageDetailView.as_view(
+        date_field='created_at'),
+        name='page-details'),
 ]

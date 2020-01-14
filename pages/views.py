@@ -1,20 +1,14 @@
-from django.views import generic
-from django.views.generic import DateDetailView
+from django.views.generic import DetailView
 
-from .models import Post
+from .models import Page
 
 
-class PostListView(generic.ListView):
-    queryset = Post.objects.published()
+class PageDetailView(DetailView):
+    queryset = Page.objects.published()
+    date_field = 'created_at'
     allow_future = False
-    paginate_by = 5
-
-
-class PostDateDetailView(DateDetailView):
-    queryset = Post.objects.published()
-    date_field = 'pub_date'
-    allow_future = False
-    month_format = '%m'
+    slug_field = 'path'
+    slug_url_kwarg = 'path'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()

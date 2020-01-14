@@ -16,10 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from pages import views as pages_views
 from core.views import home, markdown_uploader
 
 urlpatterns = [
     path('', home, name='home'),
+
     path('api/uploader/', markdown_uploader, name='markdown_uploader_page'),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
@@ -38,15 +40,18 @@ urlpatterns = [
 
     path('blog/', include('blog.urls', namespace='blog')),
     path('martor/', include('martor.urls')),
+    #path('pages/', include('pages.urls', namespace='pages')),
+    path('<path:path>/', pages_views.PageDetailView.as_view(),
+         name='page-details'),
 ]
 
 # if os.getenv('DJANGO_CONFIGURATION') == 'Dev':
-#     urlpatterns += static(settings.STATIC_URL,
-#                           document_root=settings.STATIC_ROOT)
-#     urlpatterns += static(settings.ASSETS_URL,
-#                           document_root=settings.ASSETS_ROOT)
-#     urlpatterns += static(settings.MEDIA_URL,
-#                           document_root=settings.MEDIA_ROOT)
-#     urlpatterns += static('/favicon.ico',
-#                           document_root='{}{}'.format(settings.PUBLIC_DIR,
-#                                                       '/favicon.ico'))
+#    urlpatterns += static(settings.STATIC_URL,
+#                          document_root=settings.STATIC_ROOT)
+#    urlpatterns += static(settings.ASSETS_URL,
+#                          document_root=settings.ASSETS_ROOT)
+#    urlpatterns += static(settings.MEDIA_URL,
+#                          document_root=settings.MEDIA_ROOT)
+#    urlpatterns += static('/favicon.ico',
+#                          document_root='{}{}'.format(settings.PUBLIC_DIR,
+#                                                      '/favicon.ico'))

@@ -67,6 +67,7 @@ class Common(Configuration):
         'core',
         'accounts.apps.AccountsConfig',
         'blog.apps.BlogConfig',
+        'pages.apps.PagesConfig',
         'photos.apps.PhotosConfig',
     ]
 

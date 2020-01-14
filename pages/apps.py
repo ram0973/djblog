@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class BlogConfig(AppConfig):
-    name = 'blog'
-    verbose_name = 'Blog'
+class PagesConfig(AppConfig):
+    name = 'pages'
+    verbose_name = 'Pages'

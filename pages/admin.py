@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib import admin
 from martor.widgets import AdminMartorWidget
-from .models import Post
-from .models import Tag
+from mptt.admin import MPTTModelAdmin
+
+from .models import Page
 
 
-class PostAdmin(admin.ModelAdmin):
+class PageAdmin(MPTTModelAdmin):
     prepopulated_fields = {'slug': ('title',), }
     formfield_overrides = {
         models.TextField: {'widget': AdminMartorWidget},
@@ -16,5 +17,4 @@ class PostAdmin(admin.ModelAdmin):
         obj.save()
 
 
-admin.site.register(Post, PostAdmin)
-admin.site.register(Tag)
+admin.site.register(Page, PageAdmin)

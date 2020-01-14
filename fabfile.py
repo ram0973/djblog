@@ -334,7 +334,7 @@ def deploy_local(ctx, env, repo=REPO, db_user=DB_USER, db_password=DB_PASSWORD,
            su_password, sentry_dsn)
 
 
-def input_default(name, default_value):
+def input_with_default(name, default_value):
     user_input = input('Enter {}:[{}] '.format(name, default_value))
     return default_value if not user_input else user_input
 
@@ -342,13 +342,13 @@ def input_default(name, default_value):
 @task
 def deploy_prod(ctx):
     """ Command: $ fab -e -H host deploy-prod """
-    domain = input_default('domain', APP_DOMAIN)
-    db_name = input_default('db name', DB_USER)
-    db_user = input_default('db user', DB_USER)
-    db_password = input_default('db password', DB_PASSWORD)
+    domain = input_with_default('domain', APP_DOMAIN)
+    db_name = input_with_default('db name', DB_USER)
+    db_user = input_with_default('db user', DB_USER)
+    db_password = input_with_default('db password', DB_PASSWORD)
     sentry_dsn = input('Sentry DSN: ')
-    su_email = input_default('superuser email', 'admin@{}'.format(domain))
-    su_password = input_default('superuser password', SUPERUSER_PASSWORD)
+    su_email = input_with_default('superuser email', 'admin@{}'.format(domain))
+    su_password = input_with_default('superuser password', SUPERUSER_PASSWORD)
     deploy(ctx, ENV_PROD, REPO, db_user, db_password, db_name, domain, su_email,
            su_password, sentry_dsn)
 
