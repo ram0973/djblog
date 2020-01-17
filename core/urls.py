@@ -13,9 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import os
+
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from core import settings
 from pages import views as pages_views
 from core.views import home, markdown_uploader
 
@@ -40,18 +44,17 @@ urlpatterns = [
 
     path('blog/', include('blog.urls', namespace='blog')),
     path('martor/', include('martor.urls')),
-    #path('pages/', include('pages.urls', namespace='pages')),
     path('<path:path>/', pages_views.PageDetailView.as_view(),
          name='page-details'),
 ]
 
-# if os.getenv('DJANGO_CONFIGURATION') == 'Dev':
-#    urlpatterns += static(settings.STATIC_URL,
-#                          document_root=settings.STATIC_ROOT)
-#    urlpatterns += static(settings.ASSETS_URL,
-#                          document_root=settings.ASSETS_ROOT)
-#    urlpatterns += static(settings.MEDIA_URL,
-#                          document_root=settings.MEDIA_ROOT)
-#    urlpatterns += static('/favicon.ico',
-#                          document_root='{}{}'.format(settings.PUBLIC_DIR,
-#                                                      '/favicon.ico'))
+if os.getenv('DJANGO_CONFIGURATION') == 'Dev':
+    urlpatterns += static(settings.STATIC_URL,
+                          document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.ASSETS_URL,
+                          document_root=settings.ASSETS_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static('/favicon.ico',
+                          document_root='{}{}'.format(settings.PUBLIC_DIR,
+                                                      '/favicon.ico'))
