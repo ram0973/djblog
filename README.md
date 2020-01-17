@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/ram0973/djblog/branch/master/graph/badge.svg)](https://codecov.io/gh/ram0973/djblog)
 
 # About
-This is simple Python/Django blog. Download last release [here](https://github.com/ram0973/djblog/releases/)  
+This is simple Python/Django blog. Download last release [here](https://github.com/ram0973/djblog/releases/)
 Designed to be a testing site for web/devops technologies.
 
 ## Features:
@@ -26,15 +26,15 @@ Designed to be a testing site for web/devops technologies.
 - Accounts: custom user model via AbstractBaseUser, Custom superuser create command
 
 ### Known bugs:
-Sometimes Ansible throws apt or dns resolution errors.  
-If just play playbook again, error will gone.   
+Sometimes Ansible throws apt or dns resolution errors.
+If just play playbook again, error will gone.
 Don't know how to cure yet.
 
 ## History:
 1. First release on 30.09.2019
 2. Moved to new config on Sentry
 
-## TODO (in plans, may be changed): 
+## TODO (in plans, may be changed):
 - Docker version (add ansible-docker, fabfile-docker, Makefile)
 - CI with CircleCI
 - Add db backup/restore
@@ -54,7 +54,7 @@ Don't know how to cure yet.
 # Prepare development environment on Windows 10
 
 ## Register at services
-Register at [Sentry](https://sentry.io)  
+Register at [Sentry](https://sentry.io)
 Register at [CircleCI](https://circleci.com)
 
 ## Install software
@@ -62,14 +62,14 @@ Register at [CircleCI](https://circleci.com)
 Manually:
 1) Install [Virtualbox](https://www.virtualbox.org/)
 2) Install [Vagrant](https://www.vagrantup.com/)
-3) Install [WSL](https://docs.microsoft.com/ru-ru/windows/wsl/install-win10) 
+3) Install [WSL](https://docs.microsoft.com/ru-ru/windows/wsl/install-win10)
 4) Install [Pycharm](https://www.jetbrains.com/pycharm/)
 5) Install [PgAdmin](https://www.pgadmin.org/)
 6) Install [MkCert](https://github.com/FiloSottile/mkcert) # local CA
 7) [Optional] Install [Powershell Core](https://github.com/PowerShell/PowerShell)
 8) [Optional] Install [OpenSSL](https://www.openssl.org/)
 
-You can install all of this via [Choco](https://https://chocolatey.org/install/) and Powershell:  
+You can install all of this via [Choco](https://https://chocolatey.org/install/) and Powershell:
 (But don't mix manual installed programs with programs installed with choco):
 
 ```powershell
@@ -88,12 +88,12 @@ PS> Add-AppxPackage .\Ubuntu1804.appx
 
 ## Prepare virtual machines with WSL, Vagrant, Virtualbox
 
-### Explanation 
-If you develop on Windows for Linux, it's hard to setup environment. For example:  
-We have WSL v.1 now, but docker not working in WSL without some work.  
-Docker for windows depends on Hyper-V, Hyper-V conflicts with Virtualbox/Vagrant.  
-So we must setup dev VM, and configure Pycharm for deploy sources on save to this VM.  
-If we want to test Ansible/Fabric on clear system, it's better to store sources and ssh config in WSL,  
+### Explanation
+If you develop on Windows for Linux, it's hard to setup environment. For example:
+We have WSL v.1 now, but docker not working in WSL without some work.
+Docker for windows depends on Hyper-V, Hyper-V conflicts with Virtualbox/Vagrant.
+So we must setup dev VM, and configure Pycharm for deploy sources on save to this VM.
+If we want to test Ansible/Fabric on clear system, it's better to store sources and ssh config in WSL,
 so we can easily destroy and re-create the dev/staging VMs.
 
 ### Add local development root certificates to trusted store:
@@ -118,7 +118,7 @@ PS> vagrant up dev staging
 # vagrant snapshot list
 # vagrant snapshot save snapshot_name
 # vagrant snapshot restore snapshot_name
-# vagrant box prune - delete old boxes 
+# vagrant box prune - delete old boxes
 ```
 Run another Powershell console and enter:
 ```
@@ -132,7 +132,7 @@ Next in WSL prompt:
 # for example, https://github.com/ram0973/dotfiles
 
 $ ln -s /mnt/c/Users/USERNAME/.ssh ~/.ssh
-$ sudo ln -sf /mnt/d/webapps/ /webapps # only once, /mnt/d/webapps/ is path to d:\webapps in WSL 
+$ sudo ln -sf /mnt/d/webapps/ /webapps # only once, /mnt/d/webapps/ is path to d:\webapps in WSL
 $ cd /webapps/djblog
 # check existing ssh keys
 $ ls -al ~/.ssh
@@ -177,14 +177,14 @@ Host prod
 
 $ ./bootstrap.sh
 
-At this point you can return to powershell console and save virtualbox snapshots :  
+At this point you can return to powershell console and save virtualbox snapshots :
 PS> vagrant snapshot save snapshot_name
-  
+
 ## Deploy with Ansible/Fabric to dev/staging:
 
 Return to WSL prompt:
 
-Fabric:  
+Fabric:
 ```
 $ source venv/bin/activate
 $ fab -l
@@ -192,14 +192,14 @@ $ fab -e -H dev deploy-local --env=dev
 $ fab -e -H staging deploy-local --env=staging
 $ fab -H dev,staging,prod -- uname -a # run some command oh host(s)
 ```
-Ansible:  
+Ansible:
 ```
 $ ansible-playbook ansible/deploy-local.yml -i ansible/hosts.ini --limit dev
 $ ansible-playbook ansible/deploy-local.yml -i ansible/hosts.ini --limit staging
 # -v with debug, --tags= with tags
 ```
 ## Run on dev:
-Open new wsl prompt and run dev server: 
+Open new wsl prompt and run dev server:
 ```bash
 $ ssh dev
 $ cd /webapps/djblog
@@ -216,13 +216,13 @@ Open your browser and go to https://localhost:444/
 On WSL prompt:
 ```bash
 $ ssh prod
-$ sudo visudo  
-# At the end add:  
+$ sudo visudo
+# At the end add:
 # your_username ALL=(ALL) NOPASSWD: ALL
 # Get SSL/TLS certificates on production, with wildcards
-$ certbot certonly --manual --preferred-challenges=dns --email your@email --server https://acme-v02.api.letsencrypt.org/directory --agree-tos -d your_domain -d *.your_domain 
-$ sudo crontab -e  
-# add: @monthly certbot renew  
+$ certbot certonly --manual --preferred-challenges=dns --email your@email --server https://acme-v02.api.letsencrypt.org/directory --agree-tos -d your_domain -d *.your_domain
+$ sudo crontab -e
+# add: @monthly certbot renew
 
 Next on WSL prompt:
 ```bash
@@ -245,17 +245,17 @@ Open your browser and go to https://your_domain/
 <img src="https://github.com/ram0973/djblog/blob/master/screenshots/vagrant_sftp_connection.png" width="597" height="504">
 </details>
 
-Pycharm: configure deployment to Vagrant virtual machine: 
+Pycharm: configure deployment to Vagrant virtual machine:
 
-1. Check hosts in %USERPROFILE\.ssh\known_hosts or simply delete it. 
+1. Check hosts in %USERPROFILE\.ssh\known_hosts or simply delete it.
 
 **Tools - Deployment - Configuration**:
 
-Connection type: SFTP;  
-SFTP host: 127.0.0.1; Port: 2222; User name: vagrant;  
-Authentication: key pair;  
-Deployment path: /webapps/djblog;  
-Excluded: venv, .idea, .vagrant  
+Connection type: SFTP;
+SFTP host: 127.0.0.1; Port: 2222; User name: vagrant;
+Authentication: key pair;
+Deployment path: /webapps/djblog;
+Excluded: venv, .idea, .vagrant
 
 **Tools - Deployment - Automatic uploads**: always.
 
@@ -277,17 +277,17 @@ $ flake8 # Flake8
 
 ## Test gunicorn output
 ```bash
-$ sudo curl --unix-socket /webapps/djblog/run/djblog.socket http://DOMAIN_NAME  
+$ sudo curl --unix-socket /webapps/djblog/run/djblog.socket http://DOMAIN_NAME
 ```
 
 ## Database inspection with pgadmin4
 
 1) Open [pgadmin4](https://www.pgadmin.org/)
-2) Create server with settings:  
-Server: localhost  
-Port: 5432/5433 (dev/staging)  
-User: postgres  
-Password: postgres  
+2) Create server with settings:
+Server: localhost
+Port: 5432/5433 (dev/staging)
+User: postgres
+Password: postgres
 
 ## Postgresql psql console command
 ```bash
@@ -307,7 +307,7 @@ djblog=# \z # list privileges
 djblog=# select * from accounts_user; # show users
 djblog=# \q # quit
 ```
-TODO: make tests with in-memory sqlite db?  
+TODO: make tests with in-memory sqlite db?
 
 ## Optional: How to create your own SSL certificates for local development
 We will use https://github.com/FiloSottile/mkcert and openssl:
@@ -323,13 +323,13 @@ PS> mkcert localhost
 # you can also add  C:\Program Files\OpenSSL-Win64\bin to PATH, restart shell
 PS> C:\"Program Files"\OpenSSL-Win64\bin\openssl dhparam -out d:\certs\ssl-dhparams.pem 2048
 ```
-Root certificate will be at c:\\Users\\%username%\\AppData\\Local\\mkcert\\  
-rootCA-key.pem -> copy to d:\certs  
-rootCA.pem -> copy to d:\certs and rename to chain.pem     
+Root certificate will be at c:\\Users\\%username%\\AppData\\Local\\mkcert\\
+rootCA-key.pem -> copy to d:\certs
+rootCA.pem -> copy to d:\certs and rename to chain.pem
 
-Localhost certificates:  
-d:\certs\localhost-key.pem -> rename to privkey.pem  
-d:\certs\localhost.pem -> rename to fullchain.pem  
+Localhost certificates:
+d:\certs\localhost-key.pem -> rename to privkey.pem
+d:\certs\localhost.pem -> rename to fullchain.pem
 
 ## Installing local CA with certificates on other computer
 Installing in the trust store does not require the CA key, so you can export the CA certificate and use mkcert to install it in other machines.
@@ -339,6 +339,10 @@ Installing in the trust store does not require the CA key, so you can export the
 - Copy it to a different machine
 - Set $CAROOT to its directory
 - run mkcert -install
- 
+
+## i18n
+```
+$ django-admin.py makemessages -a --ignore venv
+```
 ## License
 [MIT](http://opensource.org/licenses/MIT)

@@ -37,6 +37,9 @@ class Common(Configuration):
     STATIC_ROOT = os.path.join(PUBLIC_DIR, 'static')
     ASSETS_ROOT = os.path.join(PUBLIC_DIR, 'assets')
     MEDIA_ROOT = os.path.join(PUBLIC_DIR, 'media')
+    LOCALE_PATHS = (
+        os.path.join(BASE_DIR, 'locale'),
+    )
     STATICFILES_DIRS = (
         os.path.join(PUBLIC_DIR, 'assets'),
     )

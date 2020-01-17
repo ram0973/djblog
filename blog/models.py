@@ -7,10 +7,10 @@ from django.db import models
 from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import ugettext as _
 from markdown2 import markdown
 from martor.models import MartorField
 from mptt.models import MPTTModel, TreeForeignKey
+from django.utils.translation import gettext as _
 
 
 def get_image_upload_path(instance, filename):
@@ -28,7 +28,7 @@ class PostQuerySet(models.QuerySet):
 
 class Post(models.Model):
     CONTENT_SEPARATOR = '<!--MORE-->'
-    category = TreeForeignKey('Category',
+    category = TreeForeignKey(_('Category'),
                               null=True,
                               blank=True,
                               on_delete=models.CASCADE)
