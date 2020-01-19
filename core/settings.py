@@ -133,7 +133,7 @@ class Common(Configuration):
 
     # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-    LANGUAGE_CODE = 'ru-RU'
+    LANGUAGE_CODE = 'ru'
 
     LANGUAGES = [
         ('ru', _('Russian')),

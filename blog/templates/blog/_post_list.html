@@ -1,3 +1,4 @@
+{% load i18n %}
 <h3>Blog posts</h3>
   {% if post_list %}
   {% for post in post_list %}
@@ -12,5 +13,5 @@
   {{ post.html_excerpt|safe }}
   {% endfor %}
   {% else %}
-  <p>There are no posts yet.</p>
+  <p>{% trans "There are no posts yet." %}</p>
   {% endif %}

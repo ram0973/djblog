@@ -28,7 +28,7 @@ class PostQuerySet(models.QuerySet):
 
 class Post(models.Model):
     CONTENT_SEPARATOR = '<!--MORE-->'
-    category = TreeForeignKey(_('Category'),
+    category = TreeForeignKey('Category',
                               null=True,
                               blank=True,
                               on_delete=models.CASCADE)
@@ -122,7 +122,8 @@ class Category(MPTTModel):
 
     class Meta:
         unique_together = ('parent', 'slug',)
-        verbose_name_plural = 'categories'
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
     def get_path(self):
         try:

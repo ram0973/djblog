@@ -19,7 +19,7 @@ POSTS_ON_HOME = 5
 
 
 def home(request):
-    # posts = Post.objects.published().order_by('-created_at')[:POSTS_ON_HOME]
+    posts = Post.objects.published().order_by('-created_at')[:POSTS_ON_HOME]
     return render(request, 'core/home.html',
                   {'post_list': posts,
                    'domain': values.Value(environ_name='DOMAIN')})

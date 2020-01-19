@@ -1,0 +1,93 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-19 18:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: blog/apps.py:7
+msgid "Blog"
+msgstr "Новости"
+
+#: blog/models.py:37
+msgid "Author"
+msgstr "Автор"
+
+#: blog/models.py:42 blog/models.py:43
+msgid "Post image"
+msgstr "Картинка к записи"
+
+#: blog/models.py:45
+msgid "255 characters"
+msgstr "255 символов"
+
+#: blog/models.py:46
+msgid "Title"
+msgstr "Название новости"
+
+#: blog/models.py:48
+msgid "Post slug, unique for post date"
+msgstr "Ссылка к новости, уникальна для даты публикации"
+
+#: blog/models.py:49 blog/models.py:151
+msgid "Slug"
+msgstr "Ссылка"
+
+#: blog/models.py:56 blog/models.py:155
+msgid "Tags"
+msgstr "Теги"
+
+#: blog/models.py:62
+msgid "Publication date"
+msgstr "Дата публикации"
+
+#: blog/models.py:64
+msgid "Published"
+msgstr "Опубликовано"
+
+#: blog/models.py:69
+msgid "Post"
+msgstr "Новость"
+
+#: blog/models.py:70
+msgid "Posts"
+msgstr "Новости"
+
+#: blog/models.py:125
+msgid "Category"
+msgstr "Категория"
+
+#: blog/models.py:126
+msgid "Categories"
+msgstr "Категории"
+
+#: blog/models.py:148
+msgid "255 symbols max"
+msgstr "255 симоволов максимум"
+
+#: blog/models.py:149
+msgid "Tag name"
+msgstr "Название тега"
+
+#: blog/models.py:154
+msgid "Tag"
+msgstr "Тег"
+
+#: blog/templates/blog/_post_list.html:16
+msgid "There are no posts yet."
+msgstr "Новостей пока нет."

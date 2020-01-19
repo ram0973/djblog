@@ -22,6 +22,12 @@ log-nginx:
 log-psql:
 	tail -n20 /var/log/postgresql/postgresql-10-main.log
 
+messages:
+	django-admin.py makemessages -a --ignore venv
+
+compilemessages:
+	django-admin.py compilemessages --locale=ru
+
 migrate:
 	. venv/bin/activate && ./manage.py migrate
 

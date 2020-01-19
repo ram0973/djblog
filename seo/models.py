@@ -5,7 +5,6 @@ from django.utils.translation import gettext as _
 class SEO(models.Model):
     class Meta:
         abstract = True
-
     seo_desc = models.TextField(
         verbose_name=_("SEO Meta description"),
         blank=True,

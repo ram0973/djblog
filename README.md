@@ -343,6 +343,8 @@ Installing in the trust store does not require the CA key, so you can export the
 ## i18n
 ```
 $ django-admin.py makemessages -a --ignore venv
+# edit .po file(s)
+$ django-admin.py compilemessages
 ```
 ## License
 [MIT](http://opensource.org/licenses/MIT)
