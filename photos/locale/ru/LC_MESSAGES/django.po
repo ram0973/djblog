@@ -21,12 +21,12 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 #: photos/apps.py:7
 msgid "Photos"
-msgstr ""
+msgstr "Фотографии"
 
 #: photos/models.py:22
 msgid "Photo upload"
-msgstr ""
+msgstr "Загрузки изображения"
 
 #: photos/models.py:23
 msgid "Photo"
-msgstr ""
+msgstr "Фотография"

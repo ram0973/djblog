@@ -21,7 +21,7 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 #: core/settings.py:139
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
 #: core/settings.py:140
 msgid "English"

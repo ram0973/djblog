@@ -25,7 +25,9 @@ from core.views import home, markdown_uploader
 
 urlpatterns = [
     path('', home, name='home'),
-
+    path('page/<path:path>/', pages_views.PageDetailView.as_view(),
+         name='page-details'),
+    path('blog/', include('blog.urls', namespace='blog')),
     path('api/uploader/', markdown_uploader, name='markdown_uploader_page'),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
@@ -42,10 +44,8 @@ urlpatterns = [
     # reset/<uidb64>/<token>/, name='password_reset_confirm'
     # reset/done/, name='password_reset_complete
 
-    path('blog/', include('blog.urls', namespace='blog')),
     path('martor/', include('martor.urls')),
-    path('<path:path>/', pages_views.PageDetailView.as_view(),
-         name='page-details'),
+
 ]
 
 if os.getenv('DJANGO_CONFIGURATION') == 'Dev':

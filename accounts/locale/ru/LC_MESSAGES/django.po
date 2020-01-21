@@ -21,7 +21,7 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 #: accounts/admin.py:12
 msgid "Personal info"
-msgstr ""
+msgstr "Персональная информация"
 
 #: accounts/admin.py:13
 msgid "Permissions"

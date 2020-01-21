@@ -21,36 +21,36 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 #: pages/apps.py:7 pages/models.py:51
 msgid "Pages"
-msgstr ""
+msgstr "Страницы"
 
 #: pages/models.py:24
 msgid "Author"
-msgstr ""
+msgstr "Автор"
 
 #: pages/models.py:28
 msgid "255 characters"
-msgstr ""
+msgstr "266 символов"
 
 #: pages/models.py:29
 msgid "Title"
-msgstr ""
+msgstr "Название страницы"
 
 #: pages/models.py:30
 msgid "Page slug"
-msgstr ""
+msgstr "Ссылка на страницу"
 
 #: pages/models.py:31
 msgid "Slug"
-msgstr ""
+msgstr "ссыкла"
 
 #: pages/models.py:39
 msgid "Publication date"
-msgstr ""
+msgstr "Дата публикации"
 
 #: pages/models.py:41
 msgid "Published"
-msgstr ""
+msgstr "Опубликовано"
 
 #: pages/models.py:50
 msgid "Page"
-msgstr ""
+msgstr "Страница"

@@ -88,7 +88,7 @@ def prepare_server(ctx):
     ctx.run('sudo apt-get install language-pack-ru -y')
     ctx.run('sudo localectl set-locale LANG={}'.format(SERVER_LOCALE))
     ctx.run('source /etc/default/locale')
-    ctx.run('sudo apt-get install make git python3-venv -y')
+    ctx.run('sudo apt-get install make git python3-venv gettext -y')
     ctx.run('sudo groupadd --system {}'.format(DEV_GROUP), warn=True)
     ctx.run('sudo install -d -o {} -g {} -m ug=rwX {}'
             .format(ctx.user, DEV_GROUP, APP_DIR))

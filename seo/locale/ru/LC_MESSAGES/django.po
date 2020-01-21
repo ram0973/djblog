@@ -21,12 +21,12 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 #: seo/models.py:9
 msgid "SEO Meta description"
-msgstr ""
+msgstr "SEO поле описания"
 
 #: seo/models.py:13
 msgid "SEO Title override"
-msgstr ""
+msgstr "SEO поле титула"
 
 #: seo/models.py:17
 msgid "SEO Block indexing by search engine robots"
-msgstr ""
+msgstr "SEO блокировка индексации"

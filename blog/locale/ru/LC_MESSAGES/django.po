@@ -78,7 +78,7 @@ msgstr "Категории"
 
 #: blog/models.py:148
 msgid "255 symbols max"
-msgstr "255 симоволов максимум"
+msgstr "255 символов максимум"
 
 #: blog/models.py:149
 msgid "Tag name"
