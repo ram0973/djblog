@@ -88,6 +88,10 @@ msgstr "Название тега"
 msgid "Tag"
 msgstr "Тег"
 
+#: blog/templates/blog/_post_list.html:2
+msgid "Blog posts"
+msgstr "Новости"
+
 #: blog/templates/blog/_post_list.html:16
 msgid "There are no posts yet."
 msgstr "Новостей пока нет."

@@ -50,3 +50,7 @@ msgstr "Неверный формат изображения."
 #: core/views.py:47
 msgid "Maximum image file is %(size) MB."
 msgstr "Максимальный размер изображения %(size) МБ."
+
+#: сore/templates/layouts/base_frontend.html:76
+msgid "Back to top"
+msgstr "Вверх"
