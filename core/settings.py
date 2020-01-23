@@ -7,7 +7,7 @@ import os
 import time
 import logging
 import sentry_sdk
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from configurations import Configuration, values
 from dotenv import load_dotenv
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -29,7 +29,10 @@ sentry_sdk.init(
 
 class Common(Configuration):
     """ common settings """
+
     AUTH_USER_MODEL = 'accounts.User'
+
+    DOMAIN = values.Value(environ_name='DOMAIN')
 
     BASE_DIR = os.path.dirname(os.path.dirname(__file__))
     CORE_DIR = os.path.join(BASE_DIR, 'core')
@@ -68,6 +71,7 @@ class Common(Configuration):
         'mptt',
 
         'core',
+        'utils',
         'accounts.apps.AccountsConfig',
         'blog.apps.BlogConfig',
         'pages.apps.PagesConfig',
@@ -205,6 +209,6 @@ class Staging(Common):
 
 class Prod(Common):
     """ production settings """
-    ALLOWED_HOSTS = [values.Value(environ_name='DOMAIN'), ]
+    ALLOWED_HOSTS = [Common.DOMAIN, ]
     DEBUG = False
     TEMPLATE_DEBUG = False

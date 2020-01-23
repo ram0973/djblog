@@ -1,9 +1,14 @@
 {% extends "layouts/base_frontend.html" %}
 {% comment %}{% load martortags %}{% endcomment %}
+{% block meta %}
+  {{ block.super }}
+  {{ object.get_meta_tags }}
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+{% endblock %}
 {% block breadcrumbs %}
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
       <li class="breadcrumb-item active" aria-current="page">{{ object.title }}</li>
     </ol>
   </nav>

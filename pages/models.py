@@ -8,13 +8,15 @@ from markdown2 import markdown
 from martor.models import MartorField
 from mptt.models import MPTTModel, TreeForeignKey
 
+from utils.models import MetaTagsMixin
+
 
 class PageQuerySet(models.QuerySet):
     def published(self):
         return self.filter(Q(is_published=True))
 
 
-class Page(MPTTModel):
+class Page(MPTTModel, MetaTagsMixin):
     parent = TreeForeignKey('self', null=True, blank=True,
                             related_name='children',
                             db_index=True,

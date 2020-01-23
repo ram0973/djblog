@@ -11,6 +11,15 @@ class PageAdmin(MPTTModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': AdminMartorWidget},
     }
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'slug', 'markdown_content', 'created_at', 'is_published')
+        }),
+        ('SEO', {
+            'classes': ('collapse',),
+            'fields': ('meta_title', 'meta_description', 'meta_keywords', 'meta_robots'),
+        }),
+    )
 
     def save_model(self, request, obj, form, change):
         obj.author = request.user

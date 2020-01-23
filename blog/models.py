@@ -10,7 +10,7 @@ from django.utils import timezone
 from markdown2 import markdown
 from martor.models import MartorField
 from mptt.models import MPTTModel, TreeForeignKey
-from django.utils.translation import gettext as _
+from django.utils.translation import ugettext as _
 
 
 def get_image_upload_path(instance, filename):
