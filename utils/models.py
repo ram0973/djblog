@@ -1,7 +1,10 @@
 from django.db import models
 from django.template import loader
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
+
+from utils.managers import SoftDeletableQuerySet
 
 
 def get_meta_item(name, content):
@@ -55,3 +58,21 @@ class MetaTagsMixin(models.Model):
             self.get_meta_keywords(),
             self.get_meta_robots(),
         )))
+
+    class SoftDeletableMixin(models.Model):
+        """ Abstract base class for soft-deletable models """
+        objects = SoftDeletableQuerySet.as_manager()
+        archive_objects = models.Manager()
+        deleted_at = models.DateTimeField(null=True)
+
+        class Meta:
+            abstract = True
+
+        def delete(self, args):
+            """Softly delete the object"""
+            self.deleted_at = timezone.now()
+            self.save()
+
+        def hard_delete(self):
+            """Remove the object permanently from the database"""
+            super().delete()

@@ -23,7 +23,11 @@ def get_image_upload_path(instance, filename):
 
 class PostQuerySet(models.QuerySet):
     def published(self):
-        return self.filter(Q(is_published=True))
+        #return self.filter(Q(is_published=True))
+        return self.filter(is_published=True)
+
+    def not_future(self):
+        return self.filter(created_at__lte=datetime.datetime.now())
 
 
 class Post(models.Model):

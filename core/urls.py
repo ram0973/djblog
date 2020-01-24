@@ -23,8 +23,11 @@ from core import settings
 from pages import views as pages_views
 from core.views import home, markdown_uploader
 
+
 urlpatterns = [
     path('', home, name='home'),
+    #path('', pages_views.PageDetailView.as_view(), {'path': 'home'},
+    #     name='home'),
     path('page/<path:path>/', pages_views.PageDetailView.as_view(),
          name='page-details'),
     path('blog/', include('blog.urls', namespace='blog')),

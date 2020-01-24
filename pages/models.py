@@ -89,3 +89,8 @@ class Page(MPTTModel, MetaTagsMixin):
         self.html_content = markdown(self.markdown_content, extras=extras)
         self.path = self.get_path()
         super(Page, self).save()
+
+
+class ArchivedPage(Page):
+    """ Archive blog entries - hard-deletable """
+    objects = models.Manager()
